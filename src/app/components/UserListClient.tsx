@@ -1,4 +1,3 @@
-// app/components/PostListClient.tsx
 'use client';
 
 import { useState } from 'react';
@@ -30,45 +29,34 @@ export default function UserListClient({ users }: { users: User[] }) {
     return '|';
   };
 
+  // Array di chiavi staticamente tipizzato
+  const headers: Array<keyof User> = ['id', 'user', 'role', 'date'];
+
   return (
     <div>
       <h2 className="text-xl font-bold mb-4">Users</h2>
       <table className="table-auto w-full border-collapse border border-gray-200">
         <thead>
           <tr>
-            <th
-              className="border border-gray-300 px-4 py-2 text-left cursor-pointer"
-              onClick={() => sortList('id')}
-            >
-              ID {getSortIndicator('id')}
-            </th>
-            <th
-              className="border border-gray-300 px-4 py-2 text-left cursor-pointer"
-              onClick={() => sortList('user')}
-            >
-              User {getSortIndicator('user')}
-            </th>
-            <th
-              className="border border-gray-300 px-4 py-2 text-left cursor-pointer"
-              onClick={() => sortList('role')}
-            >
-              Role {getSortIndicator('role')}
-            </th>
-            <th
-              className="border border-gray-300 px-4 py-2 text-left cursor-pointer"
-              onClick={() => sortList('date')}
-            >
-              Date {getSortIndicator('date')}
-            </th>
+            {headers.map((key) => (
+              <th
+                key={key}
+                className="border border-gray-300 px-4 py-2 text-left cursor-pointer"
+                onClick={() => sortList(key)}
+              >
+                {key.toUpperCase()} {getSortIndicator(key)}
+              </th>
+            ))}
           </tr>
         </thead>
         <tbody>
-          {list.map((post) => (
-            <tr key={post.id}>
-              <td className="border border-gray-300 px-4 py-2">{post.id}</td>
-              <td className="border border-gray-300 px-4 py-2">{post.user}</td>
-              <td className="border border-gray-300 px-4 py-2">{post.role}</td>
-              <td className="border border-gray-300 px-4 py-2">{post.date.toString()}</td>
+          {list.map((user) => (
+            <tr key={user.id}>
+              {headers.map((key) => (
+                <td key={key} className="border border-gray-300 px-4 py-2">
+                  {key === 'date' ? user[key]?.toString() : user[key]}
+                </td>
+              ))}
             </tr>
           ))}
         </tbody>
