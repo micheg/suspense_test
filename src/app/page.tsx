@@ -14,6 +14,8 @@ export default async function Page() {
       <Suspense fallback={<LoadingSpinner />}>
         {/* Server Component che aspetta i dati */}
         <ServerUserList usersPromise={usersPromise} />
+        {/* così non funziona perché i client side component non possono essere asincroni */}
+        {/*<UserListClient users={await usersPromise} />*/}
       </Suspense>
     </main>
   );
