@@ -1,4 +1,4 @@
-# This is a suspence test.
+# This is a suspense test.
 
 ## Getting Started
 
