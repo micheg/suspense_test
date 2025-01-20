@@ -22,19 +22,22 @@ export default async function Page() {
         {/*<UserListClient users={await usersPromise} />*/}
         
         {/* wrapper generico */}
-        <ClientComponentWrapper
+      <Suspense fallback={<LoadingSpinner />}>
+        <ClientComponentWrapper<User[],'users'>
           promise={usersPromise}
           Component={UserListClient}
           propName="users"
         />
+      </Suspense>
       </Suspense>
     </main>
   );
 }
 
 // Componente Server per gestire il caricamento dei dati
+/*
 async function ServerUserList({ usersPromise }: { usersPromise: Promise<User[]> }) {
   const users = await usersPromise; // Aspetta il completamento della Promise
   return <UserListClient users={users} />; // Passa i dati al componente client
 }
-
+*/
