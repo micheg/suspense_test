@@ -1,33 +1,27 @@
 import React from 'react';
 
-interface ClientComponentWrapperProps<T> {
+interface ClientComponentWrapperProps<T, K extends string> {
   promise: Promise<T>;
-  Component: React.ComponentType<{ [key: string]: T }>;
-  propName: string;
-  fallback?: React.ReactNode; // Fallback opzionale per gestire gli errori
+  Component: React.ComponentType<{ [key in K]: T }>;
+  propName: K;
+  fallback?: React.ReactNode;
 }
 
-export default async function ClientComponentWrapper<T>({
+export default async function ClientComponentWrapper<T, K extends string>({
   promise,
   Component,
   propName,
   fallback,
-}: ClientComponentWrapperProps<T>) {
+}: ClientComponentWrapperProps<T, K>) {
   try {
     const data = await promise;
 
-    // Crea un oggetto dinamico con la propName specificata
-    const props = { [propName]: data };
+    // Forza l'oggetto props a includere esplicitamente la chiave
+    const props = { [propName]: data } as { [key in K]: T };
 
     return <Component {...props} />;
   } catch (error) {
     console.error('Error fetching data:', error);
-
-    // Mostra il fallback personalizzato, se fornito; altrimenti un messaggio di default
-    return (
-      <div>
-        {fallback || <div>Error loading data. Please try again later.</div>}
-      </div>
-    );
+    return fallback || <div>Error loading data. Please try again later.</div>;
   }
 }
